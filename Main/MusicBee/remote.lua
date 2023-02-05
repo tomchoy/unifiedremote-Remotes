@@ -68,6 +68,18 @@ actions.stop = function ()
 	keyboard.stroke("ctrl", "s");
 end
 
+--@help Skip backward 1 min
+actions.skip_backward_1min = function ()
+	actions.switch();
+	keyboard.stroke("ctrl", "left");
+end
+
+--@help Skip forward 1 min
+actions.skip_forward_1min = function ()
+	actions.switch();
+	keyboard.stroke("ctrl", "right");
+end
+
 --@help Next track
 actions.next = function ()
 	actions.switch();

@@ -17,5 +17,9 @@
       <button icon="stop" onTap="stop" />
       <button icon="playpause" onTap="play_pause" />
     </row>
+    <row>
+      <button icon="rwd" onTap="skip_backward_1min" />
+      <button icon="ff" onTap="skip_forward_1min" />
+    </row>
   </grid>
 </layout>
