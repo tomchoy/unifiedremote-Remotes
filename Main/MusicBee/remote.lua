@@ -83,19 +83,19 @@ end
 --@help Lower volume
 actions.volume_down = function ()
 	actions.switch();
-	keyboard.stroke("volumedown");
+	keyboard.stroke("ctrl", "alt", "down");
 end
 
 --@help Raise volume
 actions.volume_up = function ()
 	actions.switch();
-	keyboard.stroke("volumeup");
+	keyboard.stroke("ctrl", "alt", "up");
 end
 
 --@help Toggle mute volume
 actions.volume_mute = function ()
 	actions.switch();
-	keyboard.stroke("volumemute");
+	keyboard.stroke("ctrl", "alt", "v");
 end
 
 
