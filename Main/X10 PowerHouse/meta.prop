@@ -1,0 +1,3 @@
+meta.name: X10 PowerHouse
+meta.author: tomchoy
+meta.description: Send X10 On/Off commands to ActiveHome Interface CM15A via mochad server.
