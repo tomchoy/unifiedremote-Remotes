@@ -253,7 +253,7 @@ end
 --@help Volume up
 actions.volume_up = function ()
 	if (valid()) then
-		obj.SoundVolume = obj.SoundVolume + 10;
+		obj.SoundVolume = obj.SoundVolume + 1;
 		update_state();
 	end
 end
@@ -261,7 +261,7 @@ end
 --@help Volume Down
 actions.volume_down = function ()
 	if (valid()) then
-		obj.SoundVolume = obj.SoundVolume - 10;
+		obj.SoundVolume = obj.SoundVolume - 1;
 		update_state();
 	end
 end
