@@ -3,22 +3,22 @@
 	<row>
 		<button icon="power" weight="wrap" ontap="officeLampOn" />
 		<label text="Office Desk Lamp" color="green" />
-		<button icon="docclose"   weight="wrap" ontap="officeLampOff" />
+		<button icon="docclose" weight="wrap" ontap="officeLampOff" />
 	</row>
 	<row>
 		<button icon="power" weight="wrap" ontap="landscapeLightingOn" />
 		<label text="Landscape Lighting" color="green" />
-		<button icon="docclose"   weight="wrap" ontap="landscapeLightingOff" />
+		<button icon="docclose" weight="wrap" ontap="landscapeLightingOff" />
 	</row>
 	<row>
 		<button icon="power" weight="wrap" ontap="livingTableLampOn" />
 		<label text="Living Room Table Lamp" color="green" />
-		<button icon="docclose"   weight="wrap" ontap="livingTableLampOff" />
+		<button icon="docclose" weight="wrap" ontap="livingTableLampOff" />
 	</row>
 	<row>
 		<button icon="power" weight="wrap" ontap="livingFloorLampOn" />
 		<label text="Living Room Floor Lamp" color="green" />
-		<button icon="docclose"   weight="wrap" ontap="livingFloorLampOff" />
+		<button icon="docclose" weight="wrap" ontap="livingFloorLampOff" />
 	</row>
 	<row>
 		<button icon="power" weight="wrap" ontap="receiverPower" />
@@ -33,21 +33,26 @@
 	<row>
 		<button icon="power" weight="wrap" ontap="backyardLightsOn" />
 		<label text="Backyard Lighting" color="green" />
-		<button icon="docclose"   weight="wrap" ontap="backyardLightsOff" />
+		<button icon="docclose" weight="wrap" ontap="backyardLightsOff" />
 	</row>
 	<row>
 		<button icon="power" weight="wrap" ontap="denSpotsOn" />
 		<label text="Den Spotlights" color="green" />
-		<button icon="docclose"   weight="wrap" ontap="denSpotsOff" />
+		<button icon="docclose" weight="wrap" ontap="denSpotsOff" />
 	</row>
 	<row>
 		<button icon="power" weight="wrap" ontap="denTableLampOn" />
 		<label text="Den Table Lamp" color="green" />
-		<button icon="docclose"   weight="wrap" ontap="denTableLampOff" />
+		<button icon="docclose" weight="wrap" ontap="denTableLampOff" />
 	</row>
 	<row>
 		<button icon="power" weight="wrap" ontap="ebikeChargerOn" />
 		<label text="eBike Charger" color="green" />
-		<button icon="docclose"   weight="wrap" ontap="ebikeChargerOff" />
+		<button icon="docclose" weight="wrap" ontap="ebikeChargerOff" />
+	</row>
+	<row>
+		<button icon="power" weight="wrap" ontap="guestTableLampOn" />
+		<label text="Guest Room Table Lamp" color="green" />
+		<button icon="docclose" weight="wrap" ontap="guestTableLampOff" />
 	</row>
 </layout>

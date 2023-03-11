@@ -66,3 +66,10 @@ end
 actions.ebikeChargerOff = function ()
 	script.default(netcat_path, "echo pl c12 off | nc -w 1 192.168.168.91 1099");
 end
+
+actions.guestTableLampOn = function ()
+	script.default(netcat_path, "echo pl c13 on | nc -w 1 192.168.168.91 1099");
+end
+actions.guestTableLampOff = function ()
+	script.default(netcat_path, "echo pl c13 off | nc -w 1 192.168.168.91 1099");
+end
