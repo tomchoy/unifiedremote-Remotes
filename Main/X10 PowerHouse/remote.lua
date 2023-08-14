@@ -39,6 +39,13 @@ actions.pumpStart = function ()
 	script.default(netcat_path, "echo pl c7 on | nc -w 1 192.168.168.91 1099");
 end
 
+actions.denFanOn = function ()
+	script.default(netcat_path, "echo pl c8 on | nc -w 1 192.168.168.91 1099");
+end
+actions.denFanOff = function ()
+	script.default(netcat_path, "echo pl c8 off | nc -w 1 192.168.168.91 1099");
+end
+
 actions.backyardLightsOn = function ()
 	script.default(netcat_path, "echo pl c9 on | nc -w 1 192.168.168.91 1099");
 end
