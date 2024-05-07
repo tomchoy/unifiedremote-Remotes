@@ -28,7 +28,7 @@
 	<row>
 		<button icon="power" weight="2" ontap="pumpStart" />
 		<label text="Recirculating Pump" weight="4" color="green" />
-		<button icon="power" weight="2" ontap="pumpStart" />
+		<button icon="docclose" weight="2" ontap="pumpReset" />
 	</row>
 	<row>
 		<button icon="power" weight="2" ontap="denFanOn" />

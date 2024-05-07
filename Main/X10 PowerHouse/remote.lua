@@ -38,6 +38,9 @@ end
 actions.pumpStart = function ()
 	script.default(netcat_path, "echo rf c7 on | nc -w 1 192.168.168.89 1099");
 end
+actions.pumpReset = function ()
+	script.default(netcat_path, "echo rf c7 off | nc -w 1 192.168.168.89 1099");
+end
 
 actions.denFanOn = function ()
 	script.default(netcat_path, "echo rf c8 on | nc -w 1 192.168.168.89 1099");
