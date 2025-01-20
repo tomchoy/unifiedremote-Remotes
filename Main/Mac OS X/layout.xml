@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <layout>
+	<row weight="0"><space /></row>
 	<row>
 		<button ontap="explorer" text="Open Finder"/>
 	</row>

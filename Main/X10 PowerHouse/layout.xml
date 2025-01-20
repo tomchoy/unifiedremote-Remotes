@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+	<row><space /></row>
 	<row>
 		<button icon="power" weight="2" ontap="officeLampOn" />
 		<label text="Office Desk Lamp" weight="4" color="green" />

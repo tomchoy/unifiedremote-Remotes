@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <layout>
   <grid>
+      <row weight="0"><space /></row>
     <row>
       <button text="Restart" onTap="restart" color="red" />
       <button text="Shutdown" onTap="shutdown" color="red" />

@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <layout onLaunch="launch" onVolumeUp="volume_up" onVolumeDown="volume_down" onResume="play" onPause="pause" color="#FF7F01">
   <grid>
+    <row weight="0"><space /></row>
     <row>
       <label id="info" text="[Not Playing]" textAlign="center" />
     </row>

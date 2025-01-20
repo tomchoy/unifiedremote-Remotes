@@ -2,6 +2,7 @@
 <layout onLaunch="launch" onVolumeDown="volume_down" onVolumeUp="volume_up" color="#E0093E">
 	<tabs>
 		<tab text="Player">
+			<row weight="0"><space /></row>
 			<row weight="wrap">
 				<label id="title" text="Loading..." />
 			</row>

@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <layout onLaunch="launch" onVolumeUp="volume_up" onVolumeDown="volume_down" color="red">
   <grid>
+    <row weight="0"><space /></row>
     <row>
       <button icon="vdown" onTap="volume_down" />
       <button icon="vup" onTap="volume_up" />
