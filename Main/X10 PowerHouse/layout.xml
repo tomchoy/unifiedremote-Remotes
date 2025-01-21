@@ -3,62 +3,67 @@
 	<row><space /></row>
 	<row>
 		<button icon="power" weight="2" ontap="officeLampOn" />
-		<label text="Office Desk Lamp" weight="4" color="green" />
+		<label text="1 Office Desk Lamp" weight="4" color="green" />
 		<button icon="docclose" weight="2" ontap="officeLampOff" />
 	</row>
 	<row>
+		<button icon="power" weight="2" ontap="dirtDevilOn" />
+		<label text="2 Dirt Devil Vac" weight="4" color="green" />
+		<button icon="docclose" weight="2" ontap="dirtDevilOff" />
+	</row>
+	<row>
 		<button icon="power" weight="2" ontap="landscapeLightingOn" />
-		<label text="Landscape Lighting" weight="4" color="green" />
+		<label text="3 Landscape Lighting" weight="4" color="green" />
 		<button icon="docclose" weight="2" ontap="landscapeLightingOff" />
 	</row>
 	<row>
 		<button icon="power" weight="2" ontap="livingTableLampOn" />
-		<label text="Living Room Table Lamp" weight="4" color="green" />
+		<label text="4 Living RM Table Lamp" weight="4" color="green" />
 		<button icon="docclose" weight="2" ontap="livingTableLampOff" />
 	</row>
 	<row>
 		<button icon="power" weight="2" ontap="livingFloorLampOn" />
-		<label text="Living Room Floor Lamp" weight="4" color="green" />
+		<label text="5 Living RM Floor Lamp" weight="4" color="green" />
 		<button icon="docclose" weight="2" ontap="livingFloorLampOff" />
 	</row>
 	<row>
 		<button icon="power" weight="2" ontap="receiverPower" />
-		<label text="Home Audio Receiver" weight="4" color="green" />
+		<label text="6 Home Audio Receiver" weight="4" color="green" />
 		<button icon="power" weight="2" ontap="receiverPower" />
 	</row>
 	<row>
 		<button icon="power" weight="2" ontap="pumpStart" />
-		<label text="Recirculating Pump" weight="4" color="green" />
+		<label text="7 Recirculating Pump" weight="4" color="green" />
 		<button icon="docclose" weight="2" ontap="pumpReset" />
 	</row>
 	<row>
 		<button icon="power" weight="2" ontap="denFanOn" />
-		<label text="Den Floor Fan" weight="4" color="green" />
+		<label text="8 Den Floor Fan" weight="4" color="green" />
 		<button icon="docclose" weight="2" ontap="denFanOff" />
 	</row>
 	<row>
 		<button icon="power" weight="2" ontap="backyardLightsOn" />
-		<label text="Backyard Lighting" weight="4" color="green" />
+		<label text="9 Backyard Lighting" weight="4" color="green" />
 		<button icon="docclose" weight="2" ontap="backyardLightsOff" />
 	</row>
 	<row>
 		<button icon="power" weight="2" ontap="denSpotsOn" />
-		<label text="Den Spotlights" weight="4" color="green" />
+		<label text="10 Den Spotlights" weight="4" color="green" />
 		<button icon="docclose" weight="2" ontap="denSpotsOff" />
 	</row>
 	<row>
 		<button icon="power" weight="2" ontap="denTableLampOn" />
-		<label text="Den Table Lamp" weight="4" color="green" />
+		<label text="11 Den Table Lamp" weight="4" color="green" />
 		<button icon="docclose" weight="2" ontap="denTableLampOff" />
 	</row>
 	<row>
 		<button icon="power" weight="2" ontap="ebikeChargerOn" />
-		<label text="eBike Charger" weight="4" color="green" />
+		<label text="12 eBike Charger" weight="4" color="green" />
 		<button icon="docclose" weight="2" ontap="ebikeChargerOff" />
 	</row>
 	<row>
 		<button icon="power" weight="2" ontap="guestTableLampOn" />
-		<label text="Guest Room Table Lamp" weight="4" color="green" />
+		<label text="13 Guest RM Table Lamp" weight="4" color="green" />
 		<button icon="docclose" weight="2" ontap="guestTableLampOff" />
 	</row>
 </layout>

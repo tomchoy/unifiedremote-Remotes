@@ -10,6 +10,13 @@ actions.officeLampOff = function ()
 	script.default(netcat_path, "echo rf c1 off | nc -w 1 192.168.168.89 1099");
 end
 
+actions.dirtDevilOn = function ()
+	script.default(netcat_path, "echo rf c2 on | nc -w 1 192.168.168.89 1099");
+end
+actions.dirtDevilOff = function ()
+	script.default(netcat_path, "echo rf c2 off | nc -w 1 192.168.168.89 1099");
+end
+
 actions.landscapeLightingOn = function ()
 	script.default(netcat_path, "echo rf c3 on | nc -w 1 192.168.168.89 1099");
 end
