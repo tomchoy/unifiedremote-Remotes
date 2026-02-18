@@ -3,6 +3,8 @@ local win = libs.win;
 local utf8 = libs.utf8;
 local timer = libs.timer;
 
+local voicemeeter_exe = "C:\\Program Files (x86)\\VB\\Voicemeeter\\voicemeeter.exe"
+
 events.detect = function ()
 	return 
 		libs.fs.exists("C:\\Program Files (x86)\\MusicBee") or
@@ -58,6 +60,7 @@ end
 
 --@help Toggle playback state
 actions.play_pause = function ()
+	os.start(voicemeeter_exe, "-r")
 	actions.switch();
 	keyboard.stroke("ctrl", "p");
 end
