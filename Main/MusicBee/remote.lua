@@ -2,7 +2,9 @@ local keyboard = libs.keyboard;
 local win = libs.win;
 local utf8 = libs.utf8;
 local timer = libs.timer;
+local script = libs.script;
 
+local netcat_path = "set path=%path%;C:\\Users\\tchoy\\bin\\nc111nt"
 local voicemeeter_exe = "C:\\Program Files (x86)\\VB\\Voicemeeter\\voicemeeter.exe"
 
 events.detect = function ()
@@ -113,5 +115,7 @@ actions.volume_mute = function ()
 	keyboard.stroke("ctrl", "alt", "v");
 end
 
-
-
+--@help Toggle Home Audio Receiver power
+actions.receiverPower = function ()
+	script.default(netcat_path, "echo rf c6 on | nc -w 1 192.168.168.89 1099");
+end

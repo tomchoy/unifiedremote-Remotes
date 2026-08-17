@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <layout onLaunch="launch" onVolumeUp="volume_up" onVolumeDown="volume_down" onResume="play" onPause="pause" color="#FF7F01">
   <grid>
     <row weight="0"><space /></row>
@@ -21,6 +21,11 @@
     <row>
       <button icon="rwd" onTap="skip_backward_1min" />
       <button icon="ff" onTap="skip_forward_1min" />
+    </row>
+    <row>
+      <button icon="power" weight="2" onTap="receiverPower" />
+      <label text="Home Audio Receiver" weight="4" color="green" />
+      <button icon="power" weight="2" onTap="receiverPower" />
     </row>
   </grid>
 </layout>
