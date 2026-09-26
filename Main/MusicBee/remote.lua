@@ -81,9 +81,25 @@ end
 --@help Check for podcast updates
 actions.check_updates = function ()
 	actions.switch();
+	keyboard.stroke("ctrl", "3");
+	os.sleep(200);
 	keyboard.stroke("f5");
+	os.sleep(200);
+	keyboard.stroke("ctrl", "1");
 end
 actions.check_for_updates = actions.check_updates;
+
+--@help Switch to Now Playing tab
+actions.tab_now_playing = function ()
+	actions.switch();
+	keyboard.stroke("ctrl", "1");
+end
+
+--@help Switch to Podcasts tab
+actions.tab_podcasts = function ()
+	actions.switch();
+	keyboard.stroke("ctrl", "3");
+end
 
 --@help Skip backward 1 min
 actions.skip_backward_1min = function ()
