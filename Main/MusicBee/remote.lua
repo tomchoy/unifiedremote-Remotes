@@ -83,9 +83,18 @@ actions.check_updates = function ()
 	actions.switch();
 	keyboard.stroke("ctrl", "3");
 	os.sleep(200);
+	keyboard.stroke("ctrl", "f");
+	os.sleep(200);
+	keyboard.stroke("tab");
+	os.sleep(200);
+	keyboard.stroke("home");
+	os.sleep(200);
 	keyboard.stroke("f5");
 	os.sleep(200);
-	keyboard.stroke("ctrl", "1");
+	keyboard.stroke("d");
+	os.sleep(200);
+	keyboard.stroke("f5");
+	os.sleep(200);
 end
 actions.check_for_updates = actions.check_updates;
 
@@ -100,6 +109,32 @@ actions.tab_podcasts = function ()
 	actions.switch();
 	keyboard.stroke("ctrl", "3");
 end
+
+--@help Switch to Playlists tab
+actions.tab_playlists = function ()
+	actions.switch();
+	keyboard.stroke("ctrl", "4");
+end
+
+--@help Play Morning Wakeup playlist
+actions.play_morning_wakeup = function ()
+	actions.switch();
+	keyboard.stroke("ctrl", "4");
+	os.sleep(200);
+	keyboard.stroke("ctrl", "f");
+	os.sleep(200);
+	keyboard.stroke("tab");
+	os.sleep(200);
+	keyboard.text("Morning Wakeup");
+	os.sleep(200);
+	keyboard.stroke("return");
+	os.sleep(200);
+	keyboard.stroke("alt", "return");
+	os.sleep(200);
+	keyboard.stroke("ctrl", "1");
+end
+actions.play_morning_wake_up = actions.play_morning_wakeup;
+
 
 --@help Skip backward 1 min
 actions.skip_backward_1min = function ()
