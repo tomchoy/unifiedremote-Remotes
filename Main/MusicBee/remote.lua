@@ -48,14 +48,19 @@ events.blur = function ()
 	timer.cancel(tid);
 end
 
---@help Focus Chrome application
+--@help Focus MusicBee application
 actions.switch = function()
+	if (hwnd == 0) then
+		hwnd = find();
+	end
 	if (hwnd ~= 0) then
 		win.switchtowait("MusicBee.exe");
+	else
+		win.switchto("MusicBee.exe");
 	end
 end
 
---@help Launch Chrome application
+--@help Launch MusicBee application
 actions.launch = function()
 	os.start("MusicBee");
 end
@@ -72,6 +77,13 @@ actions.stop = function ()
 	actions.switch();
 	keyboard.stroke("ctrl", "s");
 end
+
+--@help Check for podcast updates
+actions.check_updates = function ()
+	actions.switch();
+	keyboard.stroke("f5");
+end
+actions.check_for_updates = actions.check_updates;
 
 --@help Skip backward 1 min
 actions.skip_backward_1min = function ()
