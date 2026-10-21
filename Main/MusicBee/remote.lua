@@ -135,6 +135,25 @@ actions.play_morning_wakeup = function ()
 end
 actions.play_morning_wake_up = actions.play_morning_wakeup;
 
+--@help Play Public Radio Streams playlist
+actions.play_public_radio = function ()
+	actions.switch();
+	keyboard.stroke("ctrl", "4");
+	os.sleep(200);
+	keyboard.stroke("ctrl", "f");
+	os.sleep(200);
+	keyboard.stroke("tab");
+	os.sleep(200);
+	keyboard.text("Public Radio Streams");
+	os.sleep(200);
+	keyboard.stroke("return");
+	os.sleep(200);
+	keyboard.stroke("alt", "return");
+	os.sleep(200);
+	keyboard.stroke("ctrl", "1");
+end
+actions.play_public_radio_streams = actions.play_public_radio;
+
 
 --@help Skip backward 1 min
 actions.skip_backward_1min = function ()
