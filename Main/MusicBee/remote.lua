@@ -3,6 +3,8 @@ local win = libs.win;
 local utf8 = libs.utf8;
 local timer = libs.timer;
 local script = libs.script;
+local log = libs.log;
+local server = libs.server;
 
 local netcat_path = "set path=%path%;C:\\Users\\tchoy\\bin\\nc111nt"
 local voicemeeter_exe = "C:\\Program Files (x86)\\VB\\Voicemeeter\\voicemeeter.exe"
@@ -16,6 +18,28 @@ end
 local hwnd = 0;
 local tid = -1;
 local title = "";
+
+-- Morning Wakeup sequence timer parameters
+local PUBLIC_RADIO_DURATION_MS = 600000; -- 600 seconds (10 minutes)
+local UPDATE_SETTLE_DELAY_MS = 15000;    -- 15 seconds after check_updates
+local SEQUENCE_WINDOW_SEC = 30;          -- Window to detect sequential Morning Wakeup calls
+
+local public_radio_started_at = 0;
+local tid_check_updates = -1;
+local tid_morning_wakeup = -1;
+local morning_wakeup_pending = false;
+
+function cancel_wakeup_timers ()
+	if (tid_check_updates ~= -1) then
+		timer.cancel(tid_check_updates);
+		tid_check_updates = -1;
+	end
+	if (tid_morning_wakeup ~= -1) then
+		timer.cancel(tid_morning_wakeup);
+		tid_morning_wakeup = -1;
+	end
+	morning_wakeup_pending = false;
+end
 
 function find ()
 	-- Find all top level windows
@@ -74,12 +98,13 @@ end
 
 --@help Stop playback
 actions.stop = function ()
+	cancel_wakeup_timers();
+	public_radio_started_at = 0;
 	actions.switch();
 	keyboard.stroke("ctrl", "s");
 end
 
---@help Check for podcast updates
-actions.check_updates = function ()
+function do_check_updates ()
 	actions.switch();
 	keyboard.stroke("ctrl", "3");
 	os.sleep(200);
@@ -95,6 +120,67 @@ actions.check_updates = function ()
 	os.sleep(200);
 	keyboard.stroke("f5");
 	os.sleep(200);
+end
+
+function do_play_morning_wakeup ()
+	actions.switch();
+	keyboard.stroke("ctrl", "4");
+	os.sleep(200);
+	keyboard.stroke("ctrl", "f");
+	os.sleep(200);
+	keyboard.stroke("tab");
+	os.sleep(200);
+	keyboard.text("Morning Wakeup");
+	os.sleep(200);
+	keyboard.stroke("return");
+	os.sleep(200);
+	keyboard.stroke("alt", "return");
+	os.sleep(200);
+	keyboard.stroke("ctrl", "1");
+end
+
+function do_play_public_radio ()
+	actions.switch();
+	keyboard.stroke("ctrl", "4");
+	os.sleep(200);
+	keyboard.stroke("ctrl", "f");
+	os.sleep(200);
+	keyboard.stroke("tab");
+	os.sleep(200);
+	keyboard.text("Public Radio Streams");
+	os.sleep(200);
+	keyboard.stroke("return");
+	os.sleep(200);
+	keyboard.stroke("alt", "return");
+	os.sleep(200);
+	keyboard.stroke("ctrl", "1");
+end
+
+--@help Check for podcast updates
+actions.check_updates = function ()
+	server.load("Unified.MusicBee");
+	if (public_radio_started_at > 0 and os.difftime(os.time(), public_radio_started_at) < SEQUENCE_WINDOW_SEC) then
+		if (tid_check_updates ~= -1) then
+			timer.cancel(tid_check_updates);
+		end
+		log.info("MusicBee: Scheduled Check for Updates in 600s");
+		tid_check_updates = timer.timeout(function ()
+			tid_check_updates = -1;
+			log.info("MusicBee: Running scheduled Check for Updates (600s elapsed)");
+			do_check_updates();
+			if (morning_wakeup_pending) then
+				morning_wakeup_pending = false;
+				log.info("MusicBee: Scheduled Morning Wakeup playlist in 15s");
+				tid_morning_wakeup = timer.timeout(function ()
+					tid_morning_wakeup = -1;
+					log.info("MusicBee: Playing scheduled Morning Wakeup playlist (15s after update)");
+					do_play_morning_wakeup();
+				end, UPDATE_SETTLE_DELAY_MS);
+			end
+		end, PUBLIC_RADIO_DURATION_MS);
+	else
+		do_check_updates();
+	end
 end
 actions.check_for_updates = actions.check_updates;
 
@@ -118,41 +204,43 @@ end
 
 --@help Play Morning Wakeup playlist
 actions.play_morning_wakeup = function ()
-	actions.switch();
-	keyboard.stroke("ctrl", "4");
-	os.sleep(200);
-	keyboard.stroke("ctrl", "f");
-	os.sleep(200);
-	keyboard.stroke("tab");
-	os.sleep(200);
-	keyboard.text("Morning Wakeup");
-	os.sleep(200);
-	keyboard.stroke("return");
-	os.sleep(200);
-	keyboard.stroke("alt", "return");
-	os.sleep(200);
-	keyboard.stroke("ctrl", "1");
+	server.load("Unified.MusicBee");
+	if (tid_check_updates ~= -1) then
+		morning_wakeup_pending = true;
+		log.info("MusicBee: Queued Morning Wakeup playlist to run 15s after Check for Updates");
+	elseif (public_radio_started_at > 0 and os.difftime(os.time(), public_radio_started_at) < SEQUENCE_WINDOW_SEC) then
+		if (tid_morning_wakeup ~= -1) then
+			timer.cancel(tid_morning_wakeup);
+		end
+		log.info("MusicBee: Scheduled Morning Wakeup playlist in 615s");
+		tid_morning_wakeup = timer.timeout(function ()
+			tid_morning_wakeup = -1;
+			log.info("MusicBee: Playing scheduled Morning Wakeup playlist");
+			do_play_morning_wakeup();
+		end, PUBLIC_RADIO_DURATION_MS + UPDATE_SETTLE_DELAY_MS);
+	else
+		cancel_wakeup_timers();
+		do_play_morning_wakeup();
+	end
 end
 actions.play_morning_wake_up = actions.play_morning_wakeup;
 
 --@help Play Public Radio Streams playlist
 actions.play_public_radio = function ()
-	actions.switch();
-	keyboard.stroke("ctrl", "4");
-	os.sleep(200);
-	keyboard.stroke("ctrl", "f");
-	os.sleep(200);
-	keyboard.stroke("tab");
-	os.sleep(200);
-	keyboard.text("Public Radio Streams");
-	os.sleep(200);
-	keyboard.stroke("return");
-	os.sleep(200);
-	keyboard.stroke("alt", "return");
-	os.sleep(200);
-	keyboard.stroke("ctrl", "1");
+	server.load("Unified.MusicBee");
+	cancel_wakeup_timers();
+	public_radio_started_at = os.time();
+	log.info("MusicBee: Playing Public Radio Streams");
+	do_play_public_radio();
 end
 actions.play_public_radio_streams = actions.play_public_radio;
+
+--@help Run full Morning Wakeup sequence (Public Radio 600s -> Check Updates -> Wait 15s -> Morning Wakeup)
+actions.morning_wakeup = function ()
+	actions.play_public_radio();
+	actions.check_updates();
+	actions.play_morning_wakeup();
+end
 
 
 --@help Skip backward 1 min
