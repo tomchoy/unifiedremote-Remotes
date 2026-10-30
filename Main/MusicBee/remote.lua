@@ -23,11 +23,31 @@ local title = "";
 local PUBLIC_RADIO_DURATION_MS = 600000; -- 600 seconds (10 minutes)
 local UPDATE_SETTLE_DELAY_MS = 15000;    -- 15 seconds after check_updates
 local SEQUENCE_WINDOW_SEC = 30;          -- Window to detect sequential Morning Wakeup calls
+local WAKEUP_STATE_FILE = "C:\\ProgramData\\Unified Remote\\musicbee_wakeup_state.txt";
 
-local public_radio_started_at = 0;
 local tid_check_updates = -1;
 local tid_morning_wakeup = -1;
-local morning_wakeup_pending = false;
+
+function write_wakeup_state (ts, mode)
+	libs.fs.write(WAKEUP_STATE_FILE, tostring(ts) .. ":" .. mode);
+end
+
+function read_wakeup_state ()
+	if (not libs.fs.exists(WAKEUP_STATE_FILE)) then
+		return 0, "";
+	end
+	local raw = libs.fs.read(WAKEUP_STATE_FILE);
+	if (raw == nil) then
+		return 0, "";
+	end
+	local sep = string.find(raw, ":", 1, true);
+	if (sep == nil) then
+		return tonumber(raw) or 0, "";
+	end
+	local ts = tonumber(string.sub(raw, 1, sep - 1)) or 0;
+	local mode = string.sub(raw, sep + 1);
+	return ts, mode;
+end
 
 function cancel_wakeup_timers ()
 	if (tid_check_updates ~= -1) then
@@ -38,7 +58,9 @@ function cancel_wakeup_timers ()
 		timer.cancel(tid_morning_wakeup);
 		tid_morning_wakeup = -1;
 	end
-	morning_wakeup_pending = false;
+	if (libs.fs.exists(WAKEUP_STATE_FILE)) then
+		libs.fs.delete(WAKEUP_STATE_FILE);
+	end
 end
 
 function find ()
@@ -99,7 +121,6 @@ end
 --@help Stop playback
 actions.stop = function ()
 	cancel_wakeup_timers();
-	public_radio_started_at = 0;
 	actions.switch();
 	keyboard.stroke("ctrl", "s");
 end
@@ -158,26 +179,10 @@ end
 
 --@help Check for podcast updates
 actions.check_updates = function ()
-	server.load("Unified.MusicBee");
-	if (public_radio_started_at > 0 and os.difftime(os.time(), public_radio_started_at) < SEQUENCE_WINDOW_SEC) then
-		if (tid_check_updates ~= -1) then
-			timer.cancel(tid_check_updates);
-		end
-		log.info("MusicBee: Scheduled Check for Updates in 600s");
-		tid_check_updates = timer.timeout(function ()
-			tid_check_updates = -1;
-			log.info("MusicBee: Running scheduled Check for Updates (600s elapsed)");
-			do_check_updates();
-			if (morning_wakeup_pending) then
-				morning_wakeup_pending = false;
-				log.info("MusicBee: Scheduled Morning Wakeup playlist in 15s");
-				tid_morning_wakeup = timer.timeout(function ()
-					tid_morning_wakeup = -1;
-					log.info("MusicBee: Playing scheduled Morning Wakeup playlist (15s after update)");
-					do_play_morning_wakeup();
-				end, UPDATE_SETTLE_DELAY_MS);
-			end
-		end, PUBLIC_RADIO_DURATION_MS);
+	local ts, mode = read_wakeup_state();
+	if (ts > 0 and os.difftime(os.time(), ts) < SEQUENCE_WINDOW_SEC) then
+		write_wakeup_state(ts, "check_queued");
+		log.info("MusicBee: Queued Check for Updates for Morning Wakeup sequence (600s)");
 	else
 		do_check_updates();
 	end
@@ -204,20 +209,37 @@ end
 
 --@help Play Morning Wakeup playlist
 actions.play_morning_wakeup = function ()
-	server.load("Unified.MusicBee");
-	if (tid_check_updates ~= -1) then
-		morning_wakeup_pending = true;
-		log.info("MusicBee: Queued Morning Wakeup playlist to run 15s after Check for Updates");
-	elseif (public_radio_started_at > 0 and os.difftime(os.time(), public_radio_started_at) < SEQUENCE_WINDOW_SEC) then
-		if (tid_morning_wakeup ~= -1) then
-			timer.cancel(tid_morning_wakeup);
-		end
-		log.info("MusicBee: Scheduled Morning Wakeup playlist in 615s");
-		tid_morning_wakeup = timer.timeout(function ()
-			tid_morning_wakeup = -1;
-			log.info("MusicBee: Playing scheduled Morning Wakeup playlist");
-			do_play_morning_wakeup();
-		end, PUBLIC_RADIO_DURATION_MS + UPDATE_SETTLE_DELAY_MS);
+	local ts, mode = read_wakeup_state();
+	if (ts > 0 and os.difftime(os.time(), ts) < SEQUENCE_WINDOW_SEC) then
+		server.load("Unified.MusicBee");
+		local expected_ts = ts;
+		local run_check = (mode == "check_queued");
+		write_wakeup_state(expected_ts, "armed");
+		log.info("MusicBee: Armed 600s Public Radio timer -> Check Updates -> 15s -> Morning Wakeup");
+		tid_check_updates = timer.timeout(function ()
+			tid_check_updates = -1;
+			local cur_ts, cur_mode = read_wakeup_state();
+			if (cur_ts ~= expected_ts or cur_mode ~= "armed") then
+				log.info("MusicBee: Scheduled Check for Updates cancelled");
+				return;
+			end
+			if (run_check) then
+				log.info("MusicBee: Running scheduled Check for Updates (600s elapsed)");
+				do_check_updates();
+			end
+			log.info("MusicBee: Scheduled Morning Wakeup playlist in 15s");
+			tid_morning_wakeup = timer.timeout(function ()
+				tid_morning_wakeup = -1;
+				local cur_ts2, cur_mode2 = read_wakeup_state();
+				if (cur_ts2 ~= expected_ts or cur_mode2 ~= "armed") then
+					log.info("MusicBee: Scheduled Morning Wakeup cancelled");
+					return;
+				end
+				cancel_wakeup_timers();
+				log.info("MusicBee: Playing scheduled Morning Wakeup playlist (15s after update)");
+				do_play_morning_wakeup();
+			end, UPDATE_SETTLE_DELAY_MS);
+		end, PUBLIC_RADIO_DURATION_MS);
 	else
 		cancel_wakeup_timers();
 		do_play_morning_wakeup();
@@ -227,9 +249,9 @@ actions.play_morning_wake_up = actions.play_morning_wakeup;
 
 --@help Play Public Radio Streams playlist
 actions.play_public_radio = function ()
-	server.load("Unified.MusicBee");
 	cancel_wakeup_timers();
-	public_radio_started_at = os.time();
+	local now = os.time();
+	write_wakeup_state(now, "radio");
 	log.info("MusicBee: Playing Public Radio Streams");
 	do_play_public_radio();
 end
