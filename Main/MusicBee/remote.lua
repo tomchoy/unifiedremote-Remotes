@@ -45,7 +45,7 @@ local title = "";
 -- Morning Wakeup sequence timer parameters
 local PUBLIC_RADIO_DURATION_SEC = 600;   -- 600 seconds (10 minutes)
 local RELAY_HOP_MS = 60000;              -- 60s self-relay hop (< 120s UR HTTP session timeout)
-local UPDATE_SETTLE_DELAY_MS = 15000;    -- 15 seconds after check_updates
+local UPDATE_SETTLE_DELAY_MS = 30000;    -- 30 seconds after check_updates
 local SEQUENCE_WINDOW_SEC = 30;          -- Window to detect sequential Morning Wakeup calls
 local WAKEUP_STATE_FILE = "C:\\ProgramData\\Unified Remote\\musicbee_wakeup_state.txt";
 
