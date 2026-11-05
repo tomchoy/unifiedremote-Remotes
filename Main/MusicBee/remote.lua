@@ -8,7 +8,29 @@ local server = libs.server;
 local http = libs.http;
 
 local netcat_path = "set path=%path%;C:\\Users\\tchoy\\bin\\nc111nt"
-local voicemeeter_exe = "C:\\Program Files (x86)\\VB\\Voicemeeter\\voicemeeter.exe"
+
+local voicemeeter_candidates = {
+	"C:\\Program Files (x86)\\VB\\Voicemeeter\\voicemeeterpro.exe",
+	"C:\\Program Files (x86)\\VB\\Voicemeeter\\voicemeeterpro64.exe",
+	"C:\\Program Files (x86)\\VB\\Voicemeeter\\voicemeeter8x64.exe",
+	"C:\\Program Files (x86)\\VB\\Voicemeeter\\voicemeeter.exe",
+	"C:\\Program Files\\VB\\Voicemeeter\\voicemeeterpro.exe",
+	"C:\\Program Files\\VB\\Voicemeeter\\voicemeeterpro64.exe",
+	"C:\\Program Files\\VB\\Voicemeeter\\voicemeeter8x64.exe",
+	"C:\\Program Files\\VB\\Voicemeeter\\voicemeeter.exe"
+};
+
+function restart_voicemeeter ()
+	for _, exe in ipairs(voicemeeter_candidates) do
+		if (libs.fs.exists(exe)) then
+			log.info("Voicemeeter: Restarting audio engine via " .. exe);
+			os.start(exe, "-r");
+			return true;
+		end
+	end
+	log.error("Voicemeeter: Executable not found");
+	return false;
+end
 
 events.detect = function ()
 	return 
@@ -157,10 +179,16 @@ end
 
 --@help Toggle playback state
 actions.play_pause = function ()
-	os.start(voicemeeter_exe, "-r")
+	restart_voicemeeter();
 	actions.switch();
 	keyboard.stroke("ctrl", "p");
 end
+
+--@help Restart Voicemeeter audio engine
+actions.restart_audio_engine = function ()
+	restart_voicemeeter();
+end
+actions.restart_voicemeeter = actions.restart_audio_engine;
 
 --@help Stop playback
 actions.stop = function ()
